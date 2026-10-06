@@ -1,4 +1,4 @@
-import 'package:base_flutter_prj/themes/colors.dart';
+import 'package:spendapp/themes/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

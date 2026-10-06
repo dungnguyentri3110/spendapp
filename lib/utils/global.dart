@@ -1,4 +1,4 @@
-import 'package:base_flutter_prj/presentations/app_flow/app_bloc/app_state.dart';
+import 'package:spendapp/presentations/app_flow/app_bloc/app_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
 

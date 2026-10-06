@@ -1,10 +1,10 @@
-import 'package:base_flutter_prj/data/remote/api_manager.dart';
-import 'package:base_flutter_prj/navigations/routes.dart';
-import 'package:base_flutter_prj/presentations/app_flow/app_bloc/app_bloc.dart';
-import 'package:base_flutter_prj/presentations/app_flow/app_bloc/app_state.dart';
-import 'package:base_flutter_prj/storages/share_preferences.dart';
-import 'package:base_flutter_prj/utils/app_logger.dart';
-import 'package:base_flutter_prj/utils/global.dart';
+import 'package:spendapp/data/remote/api_manager.dart';
+import 'package:spendapp/navigations/routes.dart';
+import 'package:spendapp/presentations/app_flow/app_bloc/app_bloc.dart';
+import 'package:spendapp/presentations/app_flow/app_bloc/app_state.dart';
+import 'package:spendapp/storages/share_preferences.dart';
+import 'package:spendapp/utils/app_logger.dart';
+import 'package:spendapp/utils/global.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';

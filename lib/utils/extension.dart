@@ -1,4 +1,3 @@
-import 'package:base_flutter_prj/utils/global.dart';
 import 'package:flutter/material.dart';
 
 extension SizeContext on BuildContext {

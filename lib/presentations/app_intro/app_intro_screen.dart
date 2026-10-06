@@ -1,10 +1,10 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:base_flutter_prj/navigations/routes.gr.dart';
-import 'package:base_flutter_prj/presentations/app_intro/bloc/app_intro_bloc.dart';
-import 'package:base_flutter_prj/presentations/app_intro/models/PageModel.dart';
-import 'package:base_flutter_prj/themes/colors.dart';
-import 'package:base_flutter_prj/utils/extension.dart';
-import 'package:base_flutter_prj/widgets/base_button/base_button.dart';
+import 'package:spendapp/navigations/routes.gr.dart';
+import 'package:spendapp/presentations/app_intro/bloc/app_intro_bloc.dart';
+import 'package:spendapp/presentations/app_intro/models/PageModel.dart';
+import 'package:spendapp/themes/colors.dart';
+import 'package:spendapp/utils/extension.dart';
+import 'package:spendapp/widgets/base_button/base_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -21,7 +21,7 @@ class AppIntroScreen extends StatelessWidget {
 }
 
 class _AppIntroView extends StatelessWidget {
-  const _AppIntroView({super.key});
+  const _AppIntroView();
 
   @override
   Widget build(BuildContext context) {

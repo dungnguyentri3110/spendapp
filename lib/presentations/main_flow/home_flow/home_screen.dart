@@ -1,9 +1,9 @@
-import 'package:base_flutter_prj/presentations/app_flow/app_bloc/app_action.dart';
-import 'package:base_flutter_prj/presentations/app_flow/app_bloc/app_bloc.dart';
-import 'package:base_flutter_prj/presentations/app_flow/app_bloc/app_state.dart';
-import 'package:base_flutter_prj/presentations/main_flow/home_flow/blocs/home_bloc.dart';
-import 'package:base_flutter_prj/widgets/base_button/base_button.dart';
-import 'package:base_flutter_prj/widgets/base_page/base_page.dart';
+import 'package:spendapp/presentations/app_flow/app_bloc/app_action.dart';
+import 'package:spendapp/presentations/app_flow/app_bloc/app_bloc.dart';
+import 'package:spendapp/presentations/app_flow/app_bloc/app_state.dart';
+import 'package:spendapp/presentations/main_flow/home_flow/blocs/home_bloc.dart';
+import 'package:spendapp/widgets/base_button/base_button.dart';
+import 'package:spendapp/widgets/base_page/base_page.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

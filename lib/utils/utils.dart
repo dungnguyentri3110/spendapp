@@ -1,4 +1,4 @@
-import 'package:base_flutter_prj/utils/global.dart';
+import 'package:spendapp/utils/global.dart';
 import 'package:intl/intl.dart';
 
 class Utils {

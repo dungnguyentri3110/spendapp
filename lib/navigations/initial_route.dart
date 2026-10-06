@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:auto_route/auto_route.dart';
-import 'package:base_flutter_prj/navigations/routes.gr.dart';
-import 'package:base_flutter_prj/storages/share_preferences.dart';
-import 'package:base_flutter_prj/utils/extension.dart';
+import 'package:spendapp/navigations/routes.gr.dart';
+import 'package:spendapp/storages/share_preferences.dart';
+import 'package:spendapp/utils/extension.dart';
 
 import '../core/config.dart';
 

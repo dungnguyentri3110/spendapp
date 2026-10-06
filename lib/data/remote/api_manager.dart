@@ -1,7 +1,7 @@
-import 'package:base_flutter_prj/core/app_logger.dart';
-import 'package:base_flutter_prj/core/config.dart';
-import 'package:base_flutter_prj/domain/entity/base_response/base_response.dart';
-import 'package:base_flutter_prj/utils/app_constants.dart';
+import 'package:spendapp/core/app_logger.dart';
+import 'package:spendapp/core/config.dart';
+import 'package:spendapp/domain/entity/base_response/base_response.dart';
+import 'package:spendapp/utils/app_constants.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';

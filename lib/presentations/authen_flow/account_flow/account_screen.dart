@@ -1,4 +1,4 @@
-import 'package:base_flutter_prj/widgets/base_page/base_page.dart';
+import 'package:spendapp/widgets/base_page/base_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

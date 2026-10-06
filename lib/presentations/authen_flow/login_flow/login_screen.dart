@@ -1,8 +1,8 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:base_flutter_prj/widgets/base_button/base_button.dart';
-import 'package:base_flutter_prj/widgets/base_page/base_page.dart';
-import 'package:base_flutter_prj/widgets/input/base_input.dart';
-import 'package:base_flutter_prj/widgets/toast/AppToast.dart';
+import 'package:spendapp/widgets/base_button/base_button.dart';
+import 'package:spendapp/widgets/base_page/base_page.dart';
+import 'package:spendapp/widgets/input/base_input.dart';
+import 'package:spendapp/widgets/toast/AppToast.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

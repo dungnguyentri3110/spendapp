@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.base_flutter_prj"
+    namespace = "com.app.spendapp"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = "27.0.12077973"
 
@@ -21,7 +21,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.base_flutter_prj"
+        applicationId = "com.app.spendapp"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
@@ -45,7 +45,7 @@ android {
             resValue(
                 type = "string",
                 name = "app_name",
-                value = "BasePrjDev"
+                value = "Chi tiêu"
             )
             applicationIdSuffix = ".dev"
         }
@@ -54,7 +54,7 @@ android {
             resValue(
                 type = "string",
                 name = "app_name",
-                value = "BasePrjStaging"
+                value = "Chi tiêu"
             )
             applicationIdSuffix = ".staging"
         }
@@ -63,7 +63,7 @@ android {
             resValue(
                 type = "string",
                 name = "app_name",
-                value = "BasePrj"
+                value = "Chi tiêu"
             )
         }
     }

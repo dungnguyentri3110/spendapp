@@ -1,4 +1,4 @@
-import 'package:base_flutter_prj/domain/entity/music_entity_response.dart';
+import 'package:spendapp/domain/entity/music_entity_response.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'music_model.g.dart';

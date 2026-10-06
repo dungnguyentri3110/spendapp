@@ -1,4 +1,4 @@
-import 'package:base_flutter_prj/storages/share_preferences.dart';
+import 'package:spendapp/storages/share_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

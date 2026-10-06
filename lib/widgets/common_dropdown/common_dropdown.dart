@@ -1,4 +1,4 @@
-import 'package:base_flutter_prj/widgets/common_dropdown/model/popup_menu_model.dart';
+import 'package:spendapp/widgets/common_dropdown/model/popup_menu_model.dart';
 import 'package:flutter/material.dart';
 
 class CommonDropdown<T> extends StatefulWidget {

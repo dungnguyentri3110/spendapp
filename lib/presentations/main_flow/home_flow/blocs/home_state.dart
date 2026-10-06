@@ -1,4 +1,4 @@
-import 'package:base_flutter_prj/data/models/music_model/music_model.dart';
+import 'package:spendapp/data/models/music_model/music_model.dart';
 
 class HomeState {
   final List<MusicModel>? listMusic;

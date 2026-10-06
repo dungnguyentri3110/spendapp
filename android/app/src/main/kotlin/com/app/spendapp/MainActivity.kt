@@ -1,4 +1,4 @@
-package com.example.base_flutter_prj
+package com.app.spendapp
 
 import io.flutter.embedding.android.FlutterActivity
 

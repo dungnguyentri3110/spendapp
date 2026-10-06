@@ -1,8 +1,8 @@
-import 'package:base_flutter_prj/domain/usecases/example_usecase.dart';
-import 'package:base_flutter_prj/presentations/main_flow/home_flow/blocs/home_state.dart';
-import 'package:base_flutter_prj/utils/app_logger.dart';
-import 'package:base_flutter_prj/utils/global.dart';
-import 'package:base_flutter_prj/widgets/loading/loading.dart';
+import 'package:spendapp/domain/usecases/example_usecase.dart';
+import 'package:spendapp/presentations/main_flow/home_flow/blocs/home_state.dart';
+import 'package:spendapp/utils/app_logger.dart';
+import 'package:spendapp/utils/global.dart';
+import 'package:spendapp/widgets/loading/loading.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeBloc extends Cubit<HomeState> {

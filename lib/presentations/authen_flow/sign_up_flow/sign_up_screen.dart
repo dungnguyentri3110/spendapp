@@ -1,5 +1,5 @@
 import 'package:auto_route/annotations.dart';
-import 'package:base_flutter_prj/widgets/base_page/base_page.dart';
+import 'package:spendapp/widgets/base_page/base_page.dart';
 import 'package:flutter/material.dart';
 
 @RoutePage()

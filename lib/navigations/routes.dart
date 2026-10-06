@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:base_flutter_prj/navigations/initial_route.dart';
-import 'package:base_flutter_prj/navigations/routes.gr.dart';
+import 'package:spendapp/navigations/initial_route.dart';
+import 'package:spendapp/navigations/routes.gr.dart';
 
 @AutoRouterConfig(replaceInRouteName: 'Screen|Page,Route')
 class AppRouter extends RootStackRouter {

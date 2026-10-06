@@ -1,5 +1,5 @@
-import 'package:base_flutter_prj/gen/assets.gen.dart';
-import 'package:base_flutter_prj/themes/colors.dart';
+import 'package:spendapp/gen/assets.gen.dart';
+import 'package:spendapp/themes/colors.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,34 +15,34 @@ class AppToast {
     hide();
     _cancel = BotToast.showCustomNotification(
       toastBuilder: (cancel) {
-        Color _textColor;
-        Color _bgColor;
-        String _icon;
+        Color textColor;
+        Color bgColor;
+        String icon;
         if (type == ToastType.success) {
-          _textColor = AppColors.toastSuccessText;
-          _bgColor = AppColors.toastSuccessBG;
-          _icon = Assets.icons.icToastSuccess;
+          textColor = AppColors.toastSuccessText;
+          bgColor = AppColors.toastSuccessBG;
+          icon = Assets.icons.icToastSuccess;
         } else if (type == ToastType.error) {
-          _textColor = AppColors.toastErrorText;
-          _bgColor = AppColors.toastErrorBG;
-          _icon = Assets.icons.icToastError;
+          textColor = AppColors.toastErrorText;
+          bgColor = AppColors.toastErrorBG;
+          icon = Assets.icons.icToastError;
         } else {
-          _textColor = AppColors.toastErrorText;
-          _bgColor = AppColors.toastErrorBG;
-          _icon = Assets.icons.icToastError;
+          textColor = AppColors.toastErrorText;
+          bgColor = AppColors.toastErrorBG;
+          icon = Assets.icons.icToastError;
         }
         return Container(
           padding: EdgeInsets.all(16.w),
           margin: EdgeInsets.symmetric(horizontal: 20.w),
           decoration: BoxDecoration(
-            color: _bgColor,
+            color: bgColor,
             borderRadius: BorderRadius.circular(12.r),
           ),
           child: Row(
             children: [
-              SvgPicture.asset(_icon, width: 20.w, height: 20.w),
+              SvgPicture.asset(icon, width: 20.w, height: 20.w),
               SizedBox(width: 10, height: 10),
-              Text(message, style: TextStyle(color: _textColor)),
+              Text(message, style: TextStyle(color: textColor)),
             ],
           ),
         );
