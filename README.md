@@ -1,4 +1,4 @@
-# base_flutter_prj
+# Chi tiêu
 
 A new Flutter project.
 
@@ -16,4 +16,5 @@ For help getting started with Flutter development, view the
 samples, guidance on mobile development, and a full API reference.
 
 - Chạy lệnh "dart run build_runner build --delete-conflicting-outputs" để gen ngôn ngữ, gen ảnh, gen retrofit
- # base_flutter_prj
+ # Chi tiêu
+# spendapp
