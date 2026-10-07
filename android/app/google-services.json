@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "992724142521",
+    "project_id": "chi-tieu-39375",
+    "storage_bucket": "chi-tieu-39375.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:992724142521:android:1950f95c5d527da9e6ce68",
+        "android_client_info": {
+          "package_name": "com.app.spendapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDCHBGYUATcRXvbr66X21s9kb6My6ob4KQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
