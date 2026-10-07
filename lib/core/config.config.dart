@@ -9,11 +9,13 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
 import '../data/remote/api_manager.dart' as _i876;
 import '../data/remote/api_services/api_services.dart' as _i697;
+import '../data/remote/supabase_manager.dart' as _i525;
 import '../data/repository_impl/example_repositories.dart' as _i996;
 import '../domain/repository/example_repository.dart' as _i888;
 import '../domain/usecases/example_usecase.dart' as _i181;
@@ -28,6 +30,7 @@ extension GetItInjectableX on _i174.GetIt {
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     gh.singleton<_i876.ApiManager>(() => _i876.ApiManager());
+    gh.singleton<_i525.SupabaseManager>(() => _i525.SupabaseManager());
     gh.singleton<_i524.SharePreferences>(() => _i524.SharePreferences());
     gh.singleton<_i206.AppConstants>(() => _i206.AppConstants());
     gh.lazySingleton<_i697.ApiServices>(

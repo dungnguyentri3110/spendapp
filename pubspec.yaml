@@ -66,6 +66,8 @@ dependencies:
   json_annotation: ^4.11.0
   get_it: ^9.2.1
   injectable: ^2.7.1+4
+  supabase_flutter: ^2.18.0
+  fl_chart: ^1.2.0
 
 dev_dependencies:
   flutter_test:

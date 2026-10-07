@@ -1,4 +1,5 @@
 import 'package:spendapp/core/config.dart';
+import 'package:spendapp/data/remote/supabase_manager.dart';
 import 'package:spendapp/presentations/app_flow/my_app.dart';
 import 'package:spendapp/presentations/app_flow/app_bloc/app_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -10,7 +11,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   EasyLocalization.logger.enableBuildModes = [];
-
+  final supabaseManager = getIt<SupabaseManager>();
+  await supabaseManager.initialize();
+  
   runApp(
     EasyLocalization(
       supportedLocales: [Locale('en'), Locale('vi')],

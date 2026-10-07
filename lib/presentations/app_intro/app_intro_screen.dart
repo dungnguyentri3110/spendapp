@@ -16,14 +16,28 @@ class AppIntroScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(create: (_) => AppIntroBloc(), child: _AppIntroView());
+    return BlocProvider(create: (_) => AppIntroBloc(), child: AppIntroView());
   }
 }
 
-class _AppIntroView extends StatelessWidget {
-  const _AppIntroView();
+
+class AppIntroView extends StatefulWidget {
+  const AppIntroView({super.key});
 
   @override
+  State<AppIntroView> createState() => _AppIntroViewState();
+}
+
+class _AppIntroViewState extends State<AppIntroView> {
+
+  @override
+  void initState() {
+    super.initState();
+    final bloc = context.read<AppIntroBloc>();
+    bloc.getTotalAmountPerMonth();
+  }
+
+   @override
   Widget build(BuildContext context) {
     final bloc = context.read<AppIntroBloc>();
     return Scaffold(

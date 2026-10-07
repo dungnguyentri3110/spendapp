@@ -1,5 +1,6 @@
 import 'package:spendapp/themes/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BaseInput extends StatefulWidget {
@@ -12,6 +13,10 @@ class BaseInput extends StatefulWidget {
     this.leftIcon,
     this.isPassword,
     this.required,
+    this.keyboardType,
+    this.controller,
+    this.inputFormatters,
+    this.errorText,
   });
 
   final String title;
@@ -21,6 +26,10 @@ class BaseInput extends StatefulWidget {
   final Widget? leftIcon;
   final bool? isPassword;
   final bool? required;
+  final TextInputType? keyboardType;
+  final TextEditingController? controller;
+  final List<TextInputFormatter>? inputFormatters;
+  final String? errorText;
 
   @override
   State<BaseInput> createState() => _BaseInputState();
@@ -87,7 +96,9 @@ class _BaseInputState extends State<BaseInput> {
             borderRadius: BorderRadius.circular(12.r),
             border: Border.all(
               width: 1.w,
-              color: _focus
+              color: widget.errorText != null
+                  ? AppColors.textE53A22
+                  : _focus
                   ? AppColors.borderInputFocus
                   : AppColors.borderInput,
             ),
@@ -115,6 +126,9 @@ class _BaseInputState extends State<BaseInput> {
                 child: TextField(
                   obscureText: !_show,
                   focusNode: _focusNode,
+                  keyboardType: widget.keyboardType,
+                  controller: widget.controller,
+                  inputFormatters: widget.inputFormatters,
                   style: TextStyle(
                     fontSize: 16.sp,
                     color: AppColors.text111827,
@@ -153,6 +167,16 @@ class _BaseInputState extends State<BaseInput> {
             ],
           ),
         ),
+        if (widget.errorText != null) ...[
+          SizedBox(height: 4.w),
+          Text(
+            widget.errorText!,
+            style: TextStyle(
+              fontSize: 12.sp,
+              color: AppColors.textE53A22,
+            ),
+          ),
+        ],
       ],
     );
   }

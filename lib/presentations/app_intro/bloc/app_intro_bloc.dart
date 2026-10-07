@@ -1,3 +1,4 @@
+import 'package:spendapp/data/remote/supabase_manager.dart';
 import 'package:spendapp/storages/share_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,6 +10,8 @@ import '../models/PageModel.dart';
 class AppIntroBloc extends Cubit<int> {
   final PageController _controller = PageController();
   final prefs = getIt<SharePreferences>();
+  final supabaseManager = getIt<SupabaseManager>();
+  
   var currentPage = 0;
   final List<PageModel> pages = [
     PageModel(
@@ -21,13 +24,13 @@ class AppIntroBloc extends Cubit<int> {
       image: Assets.images.intro2.path,
       title: 'Thu nhập bứt phá',
       content:
-          'Nhận hoa hồng cá nhân cực cao chỉ với  2-3 đơn hàng mỗi tháng.  Đặc biệt, hưởng thêm thu nhập thụ động khi bạn quản lý đội ngũ đại sứ cấp dưới.',
+          'Nhận hoa hồng cá nhân cực cao chỉ với 2-3 đơn hàng mỗi tháng. Đặc biệt, hưởng thêm thu nhập thụ động khi bạn quản lý đội ngũ đại sứ cấp dưới.',
     ),
     PageModel(
       image: Assets.images.intro3.path,
-      title: 'Bán hàng nhàn tênh  bằng dữ liệu thật',
+      title: 'Bán hàng nhàn tênh bằng dữ liệu thật',
       content:
-          'Edupia tổ chức lớp học thử cho khách.  Kết quả điểm số và nhận xét của giáo viên được gửi về App ngay lập tức để bạn tự tin gọi điện chốt đơn.',
+          'Edupia tổ chức lớp học thử cho khách. Kết quả điểm số và nhận xét của giáo viên được gửi về App ngay lập tức để bạn tự tin gọi điện chốt đơn.',
     ),
   ];
 
@@ -50,5 +53,9 @@ class AppIntroBloc extends Cubit<int> {
 
   Future saveViewAll() async {
     await prefs.setData("intro", "pass");
+  }
+
+  void getTotalAmountPerMonth() async {
+    await supabaseManager.getTotalAmounPermonth();
   }
 }
