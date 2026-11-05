@@ -38,6 +38,7 @@
     "monthly_balance": "Remaining balance this month",
     "monthly_spend": "Total expenses",
     "period_balance": "Balance for selected period",
+    "current_date": "Current date",
     "period_income": "Total income",
     "period_spend": "Total expenses",
     "load_error": "Could not load monthly income.",

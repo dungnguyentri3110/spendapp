@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -24,8 +25,36 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-class _HomeView extends StatelessWidget {
+class _HomeView extends StatefulWidget {
   const _HomeView();
+
+  @override
+  State<_HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<_HomeView> {
+  final ScrollController _transactionScrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _transactionScrollController.addListener(_handleTransactionScroll);
+  }
+
+  @override
+  void dispose() {
+    _transactionScrollController
+      ..removeListener(_handleTransactionScroll)
+      ..dispose();
+    super.dispose();
+  }
+
+  void _handleTransactionScroll() {
+    if (!_transactionScrollController.hasClients) return;
+    if (_transactionScrollController.position.extentAfter <= 120) {
+      context.read<HomeBloc>().loadMoreTransactions();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +83,14 @@ class _HomeView extends StatelessWidget {
                         style: TextStyle(
                           color: Colors.black54,
                           fontSize: 15.sp,
+                        ),
+                      ),
+                      SizedBox(height: 4.w),
+                      Text(
+                        '${'home.current_date'.tr()}: ${DateFormat('dd/MM/yyyy', context.locale.toString()).format(DateTime.now())}',
+                        style: TextStyle(
+                          color: Colors.black54,
+                          fontSize: 12.sp,
                         ),
                       ),
                       SizedBox(height: 10.w),
@@ -193,79 +230,76 @@ class _HomeView extends StatelessWidget {
                 ),
                 SizedBox(height: 8.w),
                 Expanded(
-                  child: ListView(
-                    children: [
-                      if (state.transactionStatus == HomeLoadStatus.loading ||
-                          state.transactionStatus == HomeLoadStatus.initial)
-                        const Center(child: CircularProgressIndicator())
-                      else if (state.transactionStatus ==
-                              HomeLoadStatus.loaded &&
-                          state.filteredTransactions.isEmpty)
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 20.w),
-                          child: Text(
-                            state.transactions.isEmpty
-                                ? 'home.no_transactions'.tr()
-                                : 'home.no_filtered_transactions'.tr(),
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.black54,
-                              fontSize: 14.sp,
-                            ),
-                          ),
-                        )
-                      else if (state.transactionStatus == HomeLoadStatus.error)
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 20.w),
-                          child: Text(
-                            'home.load_error'.tr(),
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.red,
-                              fontSize: 14.sp,
-                            ),
-                          ),
-                        )
-                      else
-                        ...state.visibleTransactions.map(
-                          (transaction) =>
-                              _TransactionTile(transaction: transaction),
-                        ),
-                      if (state.transactionStatus == HomeLoadStatus.loaded &&
-                          state.pageCount > 1) ...[
-                        SizedBox(height: 12.w),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            IconButton(
-                              onPressed: state.currentPage > 0
-                                  ? () => context.read<HomeBloc>().setPage(
-                                      state.currentPage - 1,
-                                    )
-                                  : null,
-                              icon: const Icon(Icons.chevron_left),
-                            ),
-                            Text(
-                              'home.page'.tr(
-                                args: [
-                                  (state.currentPage + 1).toString(),
-                                  state.pageCount.toString(),
-                                ],
+                  child: ScrollConfiguration(
+                    behavior: MaterialScrollBehavior().copyWith(
+                      dragDevices: {
+                        ...MaterialScrollBehavior().dragDevices,
+                        PointerDeviceKind.mouse,
+                      },
+                    ),
+                    child: ListView(
+                      controller: _transactionScrollController,
+                      children: [
+                        if ((state.transactionStatus ==
+                                    HomeLoadStatus.loading ||
+                                state.transactionStatus ==
+                                    HomeLoadStatus.initial) &&
+                            state.transactions.isEmpty)
+                          const Center(child: CircularProgressIndicator())
+                        else if (state.transactionStatus ==
+                                HomeLoadStatus.loaded &&
+                            state.filteredTransactions.isEmpty)
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 20.w),
+                            child: Text(
+                              state.transactionFilter == TransactionFilter.all
+                                  ? 'home.no_transactions'.tr()
+                                  : 'home.no_filtered_transactions'.tr(),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.black54,
+                                fontSize: 14.sp,
                               ),
-                              style: TextStyle(fontSize: 14.sp),
                             ),
-                            IconButton(
-                              onPressed: state.currentPage < state.pageCount - 1
-                                  ? () => context.read<HomeBloc>().setPage(
-                                      state.currentPage + 1,
-                                    )
-                                  : null,
-                              icon: const Icon(Icons.chevron_right),
+                          )
+                        else if (state.transactionStatus ==
+                                HomeLoadStatus.error &&
+                            state.transactions.isEmpty)
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 20.w),
+                            child: Text(
+                              'home.load_error'.tr(),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontSize: 14.sp,
+                              ),
                             ),
-                          ],
-                        ),
+                          )
+                        else
+                          ...state.visibleTransactions.map(
+                            (transaction) =>
+                                _TransactionTile(transaction: transaction),
+                          ),
+                        if (state.isLoadingMoreTransactions)
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 16.w),
+                            child: const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          ),
+                        if (state.loadMoreTransactionsError)
+                          Center(
+                            child: TextButton.icon(
+                              onPressed: context
+                                  .read<HomeBloc>()
+                                  .loadMoreTransactions,
+                              icon: const Icon(Icons.refresh),
+                              label: Text('home.load_error'.tr()),
+                            ),
+                          ),
                       ],
-                    ],
+                    ),
                   ),
                 ),
               ],
@@ -422,8 +456,12 @@ class _TransactionTile extends StatelessWidget {
                 ),
                 SizedBox(height: 4.w),
                 Text(
-                  DateFormat('dd/MM/yyyy HH:mm', context.locale.toString())
-                      .format(transaction.createdAt),
+                  DateFormat(
+                    'dd/MM/yyyy HH:mm',
+                    context.locale.toString(),
+                  ).format(
+                    transaction.createdAt.toUtc().add(const Duration(hours: 7)),
+                  ),
                   style: TextStyle(color: Colors.black54, fontSize: 12.sp),
                 ),
               ],

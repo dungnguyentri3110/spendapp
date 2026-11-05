@@ -37,6 +37,7 @@
     "monthly_balance": "Số dư còn lại trong tháng",
     "monthly_spend": "Tổng chi tiêu",
     "period_balance": "Số dư trong khoảng thời gian",
+    "current_date": "Ngày hiện tại",
     "period_income": "Tổng thu nhập",
     "period_spend": "Tổng chi tiêu",
     "load_error": "Không tải được tổng thu nhập.",

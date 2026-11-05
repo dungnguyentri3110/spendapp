@@ -13,7 +13,10 @@ class HomeState {
     this.monthlyBalance = 0,
     this.transactions = const [],
     this.transactionFilter = TransactionFilter.all,
-    this.currentPage = 0,
+    this.visibleTransactionCount = transactionsPerPage,
+    this.hasMoreTransactions = false,
+    this.isLoadingMoreTransactions = false,
+    this.loadMoreTransactionsError = false,
     this.selectedYear,
     this.selectedMonth,
     this.status = HomeLoadStatus.initial,
@@ -25,7 +28,10 @@ class HomeState {
   final double monthlyBalance;
   final List<MonthlyTransaction> transactions;
   final TransactionFilter transactionFilter;
-  final int currentPage;
+  final int visibleTransactionCount;
+  final bool hasMoreTransactions;
+  final bool isLoadingMoreTransactions;
+  final bool loadMoreTransactionsError;
   final int? selectedYear;
   final int? selectedMonth;
   final HomeLoadStatus status;
@@ -50,17 +56,9 @@ class HomeState {
     };
   }
 
-  int get pageCount =>
-      (filteredTransactions.length / transactionsPerPage).ceil();
-
   List<MonthlyTransaction> get visibleTransactions {
-    final start = currentPage * transactionsPerPage;
-    if (start >= filteredTransactions.length) return const [];
-    final end = (start + transactionsPerPage).clamp(
-      0,
-      filteredTransactions.length,
-    );
-    return filteredTransactions.sublist(start, end);
+    final end = visibleTransactionCount.clamp(0, filteredTransactions.length);
+    return filteredTransactions.sublist(0, end);
   }
 
   HomeState copyWith({
@@ -69,7 +67,10 @@ class HomeState {
     double? monthlyBalance,
     List<MonthlyTransaction>? transactions,
     TransactionFilter? transactionFilter,
-    int? currentPage,
+    int? visibleTransactionCount,
+    bool? hasMoreTransactions,
+    bool? isLoadingMoreTransactions,
+    bool? loadMoreTransactionsError,
     int? selectedYear,
     int? selectedMonth,
     bool clearSelectedYear = false,
@@ -83,7 +84,13 @@ class HomeState {
       monthlyBalance: monthlyBalance ?? this.monthlyBalance,
       transactions: transactions ?? this.transactions,
       transactionFilter: transactionFilter ?? this.transactionFilter,
-      currentPage: currentPage ?? this.currentPage,
+      visibleTransactionCount:
+          visibleTransactionCount ?? this.visibleTransactionCount,
+      hasMoreTransactions: hasMoreTransactions ?? this.hasMoreTransactions,
+      isLoadingMoreTransactions:
+          isLoadingMoreTransactions ?? this.isLoadingMoreTransactions,
+      loadMoreTransactionsError:
+          loadMoreTransactionsError ?? this.loadMoreTransactionsError,
       selectedYear: clearSelectedYear
           ? null
           : selectedYear ?? this.selectedYear,

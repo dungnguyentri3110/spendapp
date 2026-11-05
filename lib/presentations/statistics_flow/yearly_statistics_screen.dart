@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -34,7 +35,10 @@ class _YearlyStatisticsView extends StatefulWidget {
 
 class _YearlyStatisticsViewState extends State<_YearlyStatisticsView> {
   static const double _monthChartWidth = 140;
+  final GlobalKey _chartViewportKey = GlobalKey();
   final ScrollController _chartScrollController = ScrollController();
+  int? _chartDragPointer;
+  double? _chartDragLastX;
 
   @override
   void dispose() {
@@ -55,6 +59,48 @@ class _YearlyStatisticsViewState extends State<_YearlyStatisticsView> {
       );
       _chartScrollController.jumpTo(targetOffset);
     });
+  }
+
+  void _handleChartPointerDown(PointerDownEvent event) {
+    if (event.kind != PointerDeviceKind.mouse ||
+        event.buttons & kPrimaryMouseButton == 0 ||
+        !_isInsideChart(event.position)) {
+      return;
+    }
+    _chartDragPointer = event.pointer;
+    _chartDragLastX = event.position.dx;
+  }
+
+  void _handleChartPointerMove(PointerMoveEvent event) {
+    if (event.pointer != _chartDragPointer ||
+        event.buttons & kPrimaryMouseButton == 0 ||
+        _chartDragLastX == null ||
+        !_chartScrollController.hasClients) {
+      return;
+    }
+
+    final deltaX = event.position.dx - _chartDragLastX!;
+    _chartDragLastX = event.position.dx;
+    final position = _chartScrollController.position;
+    _chartScrollController.jumpTo(
+      (_chartScrollController.offset - deltaX)
+          .clamp(0.0, position.maxScrollExtent)
+          .toDouble(),
+    );
+  }
+
+  void _handleChartPointerEnd(PointerEvent event) {
+    if (event.pointer == _chartDragPointer) {
+      _chartDragPointer = null;
+      _chartDragLastX = null;
+    }
+  }
+
+  bool _isInsideChart(Offset position) {
+    final renderObject = _chartViewportKey.currentContext?.findRenderObject();
+    if (renderObject is! RenderBox) return false;
+    final topLeft = renderObject.localToGlobal(Offset.zero);
+    return (topLeft & renderObject.size).contains(position);
   }
 
   @override
@@ -109,7 +155,23 @@ class _YearlyStatisticsViewState extends State<_YearlyStatisticsView> {
                   },
                 ),
                 SizedBox(height: 20.w),
-                Expanded(child: _buildContent(context, state)),
+                Expanded(
+                  child: ScrollConfiguration(
+                    behavior: MaterialScrollBehavior().copyWith(
+                      dragDevices: {
+                        ...MaterialScrollBehavior().dragDevices,
+                        PointerDeviceKind.mouse,
+                      },
+                    ),
+                    child: Listener(
+                      onPointerDown: _handleChartPointerDown,
+                      onPointerMove: _handleChartPointerMove,
+                      onPointerUp: _handleChartPointerEnd,
+                      onPointerCancel: _handleChartPointerEnd,
+                      child: _buildContent(context, state),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -180,6 +242,7 @@ class _YearlyStatisticsViewState extends State<_YearlyStatisticsView> {
           ),
           SizedBox(height: 16.w),
           SizedBox(
+            key: _chartViewportKey,
             height: 304.w,
             child: Padding(
               padding: EdgeInsets.only(top: 24.w),

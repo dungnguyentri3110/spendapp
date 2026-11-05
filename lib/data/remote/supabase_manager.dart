@@ -117,52 +117,123 @@ class SupabaseManager {
       final results = await Future.wait<List<Map<String, dynamic>>>([
         if (type == null || type == MonthlyTransactionType.income)
           _fetchTransactions(
-          table: 'income',
-          dateColumn: 'time_change',
-          select: 'amount, amount_source, time_change, created_at',
-          userId: user.id,
-          startDate: startDate,
-          endDate: endDate,
+            table: 'income',
+            dateColumn: 'time_change',
+            select: 'amount, amount_source, time_change, created_at',
+            userId: user.id,
+            startDate: startDate,
+            endDate: endDate,
           )
         else
           Future.value(<Map<String, dynamic>>[]),
         if (type == null || type == MonthlyTransactionType.spend)
           _fetchTransactions(
-          table: 'spend',
-          dateColumn: 'time_spend',
-          select: 'amount, used_message, time_spend, created_at',
-          userId: user.id,
-          startDate: startDate,
-          endDate: endDate,
+            table: 'spend',
+            dateColumn: 'time_spend',
+            select: 'amount, used_message, time_spend, created_at',
+            userId: user.id,
+            startDate: startDate,
+            endDate: endDate,
           )
         else
           Future.value(<Map<String, dynamic>>[]),
       ]);
 
-      final transactions = <MonthlyTransaction>[
-        for (final row in results[0])
-          MonthlyTransaction(
-            amount: (row['amount'] as num?)?.toDouble() ?? 0,
-            description: row['amount_source'] as String? ?? '',
-            date: DateTime.parse(row['time_change'] as String),
-            createdAt: DateTime.parse(row['created_at'] as String),
-            type: MonthlyTransactionType.income,
-          ),
-        for (final row in results[1])
-          MonthlyTransaction(
-            amount: (row['amount'] as num?)?.toDouble() ?? 0,
-            description: row['used_message'] as String? ?? '',
-            date: DateTime.parse(row['time_spend'] as String),
-            createdAt: DateTime.parse(row['created_at'] as String),
-            type: MonthlyTransactionType.spend,
-          ),
-      ];
-      transactions.sort((a, b) => b.date.compareTo(a.date));
+      final transactions = _mapTransactions(results[0], results[1]);
       return transactions;
     } catch (e) {
       Log.d("SupabaseManager getTransactionsInRange error: $e");
       rethrow;
     }
+  }
+
+  Future<({List<MonthlyTransaction> transactions, bool hasMore})>
+  getTransactionsPage({
+    DateTime? startDate,
+    DateTime? endDate,
+    MonthlyTransactionType? type,
+    required int offset,
+    required int limit,
+  }) async {
+    try {
+      if (!isInitialized) {
+        throw StateError('Supabase has not been initialized.');
+      }
+      final client = Supabase.instance.client;
+      final user = client.auth.currentUser;
+      if (user == null) {
+        throw StateError('Sign in is required to load income.');
+      }
+
+      final results = await Future.wait<List<Map<String, dynamic>>>([
+        if (type == null || type == MonthlyTransactionType.income)
+          _fetchTransactions(
+            table: 'income',
+            dateColumn: 'time_change',
+            select: 'amount, amount_source, time_change, created_at',
+            userId: user.id,
+            startDate: startDate,
+            endDate: endDate,
+            offset: offset,
+            limit: limit + 1,
+          )
+        else
+          Future.value(<Map<String, dynamic>>[]),
+        if (type == null || type == MonthlyTransactionType.spend)
+          _fetchTransactions(
+            table: 'spend',
+            dateColumn: 'time_spend',
+            select: 'amount, used_message, time_spend, created_at',
+            userId: user.id,
+            startDate: startDate,
+            endDate: endDate,
+            offset: offset,
+            limit: limit + 1,
+          )
+        else
+          Future.value(<Map<String, dynamic>>[]),
+      ]);
+
+      final hasMore =
+          results[0].length > limit || results[1].length > limit;
+      final transactions = _mapTransactions(
+        results[0].take(limit).toList(),
+        results[1].take(limit).toList(),
+      );
+      return (transactions: transactions, hasMore: hasMore);
+    } catch (e) {
+      Log.d("SupabaseManager getTransactionsPage error: $e");
+      rethrow;
+    }
+  }
+
+  List<MonthlyTransaction> _mapTransactions(
+    List<Map<String, dynamic>> incomeRows,
+    List<Map<String, dynamic>> spendRows,
+  ) {
+    final transactions = <MonthlyTransaction>[
+      for (final row in incomeRows)
+        MonthlyTransaction(
+          amount: (row['amount'] as num?)?.toDouble() ?? 0,
+          description: row['amount_source'] as String? ?? '',
+          date: DateTime.parse(row['time_change'] as String),
+          createdAt: DateTime.parse(row['created_at'] as String),
+          type: MonthlyTransactionType.income,
+        ),
+      for (final row in spendRows)
+        MonthlyTransaction(
+          amount: (row['amount'] as num?)?.toDouble() ?? 0,
+          description: row['used_message'] as String? ?? '',
+          date: DateTime.parse(row['time_spend'] as String),
+          createdAt: DateTime.parse(row['created_at'] as String),
+          type: MonthlyTransactionType.spend,
+        ),
+    ];
+    transactions.sort((a, b) {
+      final dateOrder = b.date.compareTo(a.date);
+      return dateOrder != 0 ? dateOrder : b.createdAt.compareTo(a.createdAt);
+    });
+    return transactions;
   }
 
   Future<YearlyTransactionSummary> getYearlyTransactionSummary(int year) async {
@@ -224,26 +295,31 @@ class SupabaseManager {
     required String userId,
     DateTime? startDate,
     DateTime? endDate,
+    int? offset,
+    int? limit,
   }) async {
-    final query = Supabase.instance.client
+    var query = Supabase.instance.client
         .from(table)
         .select(select)
         .eq('user_id', userId);
     if (startDate != null && endDate != null) {
-      final rows = await query
+      query = query
           .gte(dateColumn, _formatDate(startDate))
           .lt(dateColumn, _formatDate(endDate));
-      return List<Map<String, dynamic>>.from(rows);
     }
-    if (startDate != null) {
-      final rows = await query.gte(dateColumn, _formatDate(startDate));
-      return List<Map<String, dynamic>>.from(rows);
+    else if (startDate != null) {
+      query = query.gte(dateColumn, _formatDate(startDate));
     }
-    if (endDate != null) {
-      final rows = await query.lt(dateColumn, _formatDate(endDate));
-      return List<Map<String, dynamic>>.from(rows);
+    else if (endDate != null) {
+      query = query.lt(dateColumn, _formatDate(endDate));
     }
-    final rows = await query;
+
+    final orderedQuery = query
+        .order(dateColumn, ascending: false)
+        .order('created_at', ascending: false);
+    final rows = offset != null && limit != null
+        ? await orderedQuery.range(offset, offset + limit - 1)
+        : await orderedQuery;
     return List<Map<String, dynamic>>.from(rows);
   }
 
